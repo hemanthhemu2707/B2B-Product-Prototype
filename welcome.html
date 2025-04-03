@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2B Marketplace - Supplier</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        /* ... (Your existing CSS styles) ... */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1rem 0;
+            width: 100%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center; /* Align items vertically */
+        }
+
+        .nav-links a:hover {
+            color: #00bcd4;
+        }
+
+        .nav-links a i {
+            margin-right: 5px; /* Add space between icon and text */
+        }
+
+        .logout-icon {
+            cursor: pointer;
+            font-size: 1.5em;
+            margin-left: 20px;
+        }
+
+        main {
+            width: 100%;
+            max-width: none;
+            margin: 20px 0;
+            padding: 20px;
+            flex-grow: 1;
+            box-sizing: border-box;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 0.5rem 0;
+            font-size: 0.8rem;
+            width: 100%;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #00bcd4;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0097a7;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        .chat-window {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        .chat-message {
+            margin-bottom: 5px;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .chat-message.sender {
+            background-color: #e0f7fa;
+            text-align: left;
+        }
+
+        .chat-message.receiver {
+            background-color: #f0f4c8;
+            text-align: right;
+        }
+
+        .chat-input {
+            display: flex;
+        }
+
+        .chat-input textarea {
+            flex-grow: 1;
+            resize: none;
+        }
+
+        .chat-list {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .chat-list li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-list li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .chat-list li .user-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        .chat-list li .chat-info {
+            flex-grow: 1;
+        }
+
+        .chat-list li .chat-info p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .back-button {
+            background-color: #ddd;
+            color: black;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .product-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .product-item i {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .profile-card {
+            display: flex;
+            align-items: center;
+        }
+        .profile-icon{
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            margin-right: 20px;
+        }
+        .profile-details p{
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">B2B Marketplace</div>
+            <ul class="nav-links">
+                <li><a href="supplier.html"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="supplier-products.html"><i class="fa fa-cubes"></i> Products</a></li>
+                <li><a href="supplier-inquiries.html"><i class="fa fa-comments"></i> Inquiries</a></li>
+                <li><a href="supplier-profile.html"><i class="fa fa-user"></i> Profile</a></li>
+                <li class="logout-icon" onclick="logout()"><i class="fa fa-sign-out"></i></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="content">
+        <div class="card">
+            <h1>Welcome to the B2B Marketplace - Supplier</h1>
+            <p>Manage your products and connect with buyers.</p>
+            <button onclick="loadPage('supplier-products.html')">Manage Products</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 B2B Marketplace</p>
+    </footer>
+
+    <script>
+        $(document).ready(function() {
+            loadPage('supplier.html');
+
+            $('.nav-links a').click(function(e) {
+                e.preventDefault();
+                const page = $(this).attr('href');
+                loadPage(page);
+            });
+        });
+
+        let chatListContent = '';
+
+        function loadPage(page) {
+            let content = '';
+            if (page === 'supplier.html') {
+                content = `<div class="card">
+                    <h1>Welcome to the B2B Marketplace - Supplier</h1>
+                    <p>Manage your products and connect with buyers.</p>
+                    <button onclick="loadPage('supplier-products.html')">Manage Products</button>
+                </div>`;
+            } else if (page === 'supplier-products.html') {
+                content = `<div class="card">
+                    <h2>Manage Products</h2>
+                    <button onclick="loadPage('supplier-add-product.html')">Add Product</button>
+                    <div class="product-list">
+                        <div class="product-item">
+                            <i class="fa fa-cogs"></i>
+                            <h3>Industrial Gears</h3>
+                            <p>High-precision gears for machinery.</p>
+                            <button onclick="loadPage('supplier-edit-product.html')">Edit</button>
+                        </div>
+                        <div class="product-item">
+                            <i class="fa fa-cube"></i>
+                            <h3>Steel Beams</h3>
+                            <p>Durable steel beams for construction.</p>
+                            <button onclick="loadPage('supplier-edit-product.html')">Edit</button>
+                        </div>
+                        <div class="product-item">
+                            <i class="fa fa-truck"></i>
+                            <h3>Heavy Duty Trucks</h3>
+                            <p>Reliable trucks for transport.</p>
+                            <button onclick="loadPage('supplier-edit-product.html')">Edit</button>
+                        </div>
+                        <div class="product-item">
+                            <i class="fa fa-wrench"></i>
+                            <h3>Automotive Parts</h3>
+                            <p>Various automotive parts.</p>
+                            <button onclick="loadPage('supplier-edit-product.html')">Edit</button>
+                        </div>
+                        <div class="product-item">
+                            <i class="fa fa-flask"></i>
+                            <h3>Chemicals</h3>
+                            <p>Industrial grade chemicals.</p>
+                            <button onclick="loadPage('supplier-edit-product.html')">Edit</button>
+                        </div>
+                        <div class="product-item">
+                            <i class="fa fa-hand-o-up"></i>
+                            <h3>Construction Tools</h3>
+                            <p>Various construction tools.</p>
+                            <button onclick="loadPage('supplier-edit-product.html')">Edit</button>
+                        </div>
+                        <div class="product-item">
+                            <i class="fa fa-bolt"></i>
+                            <h3>Electrical Components</h3>
+                            <p>Electrical components and parts.</p>
+                            <button onclick="loadPage('supplier-edit-product.html')">Edit</button>
+                        </div>
+                        <div class="product-item">
+                            <i class="fa fa-tint"></i>
+                            <h3>Industrial Paints</h3>
+                            <p>High quality industrial paints.</p>
+                            <button onclick="loadPage('supplier-edit-product.html')">Edit</button>
+                        </div>
+                        <div class="product-item">
+                            <i class="fa fa-thermometer-half"></i>
+                            <h3>HVAC Systems</h3>
+                            <p>Heating, ventilation, and air conditioning systems.</p>
+                            <button onclick="loadPage('supplier-edit-product.html')">Edit</button>
+                        </div>
+                        <div class="product-item">
+                            <i class="fa fa-recycle"></i>
+                            <h3>Recycled Materials</h3>
+                            <p>Recycled industrial materials.</p>
+                            <button onclick="loadPage('supplier-edit-product.html')">Edit</button>
+                        </div>
+                    </div>
+                </div>`;
+            } else if (page === 'supplier-inquiries.html') {
+                chatListContent = `<input type="text" id="chatSearch" placeholder="Search Chats...">
+                    <ul class="chat-list" id="chatList">
+                        <li onclick="loadChat('Buyer 1')">
+                            <div class="user-icon">B</div>
+                            <div class="chat-info">
+                                <h3>Buyer 1</h3>
+                                <p>Last chat: Hello from Buyer 1</p>
+                            </div>
+                        </li>
+                        <li onclick="loadChat('Buyer 2')">
+                            <div class="user-icon">B</div>
+                            <div class="chat-info">
+                                <h3>Buyer 2</h3>
+                                <p>Last chat: Inquiry about Product 2</p>
+                            </div>
+                        </li>
+                    </ul>`;
+                content = `<div class="card">
+                    <h2>Buyer Inquiries</h2>
+                    ${chatListContent}
+                    <div id="chatContent"></div>
+                </div>`;
+            } else if (page === 'supplier-profile.html') {
+                content = `<div class="card">
+                    <h2>Profile</h2>
+                    <div class="profile-card">
+                        <div class="profile-icon">SU</div>
+                        <div class="profile-details">
+                            <p><strong>Name:</strong> Supplier User</p>
+                            <p><strong>Email:</strong> supplier.user@example.com</p>
+                            <p><strong>Phone:</strong> 123-456-7890</p>
+                            <button>Edit Profile</button>
+                        </div>
+                    </div>
+                </div>`;
+            } else if (page === 'supplier-add-product.html') {
+                content = `<div class="card">
+                    <h2>Add Product</h2>
+                    <input type="text" placeholder="Product Name">
+                    <textarea placeholder="Description"></textarea>
+                    <input type="number" placeholder="Price">
+                    <button>Add</button>
+                </div>`;
+            } else if (page === 'supplier-edit-product.html') {
+                content = `<div class="card">
+                    <h2>Edit Product</h2>
+                    <input type="text" placeholder="Product Name" value="Industrial Gears">
+                    <textarea placeholder="Description">High-precision gears for machinery.</textarea>
+                    <input type="number" placeholder="Price" value="500">
+                    <button>Save</button>
+                </div>`;
+            }
+
+            $('#content').html(content);
+            $('#content *').addClass('fade-in slide-in');
+            if(page === 'supplier-inquiries.html'){
+                $('#chatSearch').on('input', function() {
+                    let searchValue = $(this).val().toLowerCase();
+                    $('#chatList li').filter(function() {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(searchValue) > -1)
+                    });
+                });
+            }
+        }
+
+        function loadChat(buyerName){
+            let chatContent = `<button class="back-button" onclick="loadPage('supplier-inquiries.html')">Back</button>
+                <div class="chat-window">
+                    <div class="chat-message receiver">Hello from Supplier to ${buyerName}</div>
+                    <div class="chat-message sender">Hello from ${buyerName}</div>
+                    <div class="chat-message receiver">Can I provide more details?</div>
+                </div>
+                <div class="chat-input">
+                    <textarea placeholder="Type your message..."></textarea>
+                    <button>Send</button>
+                </div>`;
+
+            $('#chatContent').html(chatContent);
+            $('#chatList').hide();
+            $('#chatSearch').hide();
+        }
+
+        function logout() {
+            window.location.href = 'auth.html';
+        }
+    </script>
+</body>
+</html>
